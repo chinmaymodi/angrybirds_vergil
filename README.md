@@ -1,6 +1,12 @@
 angrybirds_vergil
 =================
+by
 
-Repo for the IT326 coursework
+Chinmay Modi, 200901039
+=================
 
-Test Modification for push.
+Repo for my project work of IT326 course "Introduction to AI"
+
+mail me : chinmaymodi@gmail.com if you have any suggestions or questions
+
+-Chinmay
