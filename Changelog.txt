@@ -1,0 +1,21 @@
+Changelog by Chinmay Modi, 200901039
+Preferably known as V3rG1L
+
+TODO:
+Improve my heuristic for better scores
+Test on a wider range of levels so that I can get better heuristic
+Read papers of previous competitions to make a better heuristic
+Try to add a learning heuristic that can replay a level multiple times and improve its own score
+
+Version 1.1:
+
+10 November 2014
+
+Modified the original code
+Added a simple proximity based heuristic that allows me to find best blocks to hit
+So far tested on the first five levels, the bot improved my score on all levels O_O although that might simply be because I am a shitty player :D
+
+THE BEGINNING OF TIME
+
+Simply created the repo and learned commands to modify it in ubuntu
+Then realised there was an effortless windows client available as well :| Oh well, atleast I learned something
