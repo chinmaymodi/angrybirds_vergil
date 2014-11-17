@@ -15,6 +15,8 @@ public class ABObject extends Rectangle {
  private static final long serialVersionUID = 1L;
  private static int counter = 0;
  public int id;
+    public int height = 0;
+    public int width = 0;
  //object type
  public ABType type;
  
@@ -39,6 +41,13 @@ public ABObject(Rectangle mbr, ABType type, int id) {
 	this.type = type;
 	this.id = id;
 }
+    public ABObject(Rectangle mbr, ABType type, int wd, int ht) {
+        super(mbr);
+        this.type = type;
+        this.id = counter++;
+        this.height = ht;
+        this.width = wd;
+    }
 public ABObject(ABObject ab)
 {
 	super(ab.getBounds());

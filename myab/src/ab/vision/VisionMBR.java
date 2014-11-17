@@ -11,6 +11,7 @@ package ab.vision;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -494,16 +495,25 @@ public class VisionMBR {
 	{
 	
 		List<ABObject> objects = new LinkedList<ABObject>();
-		if(type == ABType.Wood || type == ABType.Ice || type == ABType.Stone || type == ABType.TNT)
-			for(Rectangle rec: mbrs)
-				objects.add(new ABObject(rec, type));
-		else 
-			if(type == ABType.Pig)
-				for(Rectangle rec: mbrs)
-					objects.add(new ABObject(rec, type));
-		else
-			for(Rectangle rec: mbrs)
-				objects.add(new ABObject(rec, type));
+		if(type == ABType.Wood || type == ABType.Ice || type == ABType.Stone || type == ABType.TNT) {
+            for (Rectangle rec : mbrs) {
+                Dimension dim = rec.getSize();
+                double widt = dim.getWidth();
+                double heigh = dim.getHeight();
+                int width = (int) widt;
+                int height = (int) heigh;
+                objects.add(new ABObject(rec, type, width, height));
+            }
+        }
+		else if(type == ABType.Pig) {
+                for (Rectangle rec : mbrs) {
+                    objects.add(new ABObject(rec, type));
+                }
+        }
+		else {
+            for(Rectangle rec: mbrs)
+                objects.add(new ABObject(rec, type));
+        }
 		return objects;
 	}
 	public List<Rectangle> findBlackBirdsMBRs() {
