@@ -134,7 +134,7 @@ public class ClientNaiveAgent implements Runnable {
         //System.out.println("Got score, now get next level\n");
         currentLevel = (byte) getNextLevel();
         //System.out.println("Got next level, now load it\n");
-        currentLevel = 4;
+        //currentLevel = 4;
         byte temp = ar.loadLevel(currentLevel);
         //byte temp = ar.loadLevel((byte)4);
         //System.out.println("Loaded level, now attempting to analyze state\n");
@@ -150,32 +150,33 @@ public class ClientNaiveAgent implements Runnable {
                     //Do nothing since all strategies failed
                     //System.out.println("We are doomed, all strategies failed :(.\nGoing to next level now.\n");
                     System.out.println("Strategy2 failed to get 3 stars, got score: " + temp1 + ".\n");
-                    //System.out.println("Both strategies failed at scoring 3 stars.");
+                    System.out.println("Both strategies failed at scoring 3 stars.");
                     satisfactory = true;
                     firsttry = true;
+                    System.out.println("Set firsttry and satisfactory to true.");
                 }
                 else if(star3score[currentLevel - 1] > temp1) {
                     if(firsttry == true) {
                         firsttry = false;
                         System.out.println("Strategy1 failed to get 3 stars, got score: " + temp1 + ".\nTrying strategy2 now.\n");
                         satisfactory = false;
+                        System.out.println("Set firsttry and satisfactory to false.");
                     }
-                    state = GameState.LOST;
                 }
                 else {
                     satisfactory = true;
                     int best = maxscore[currentLevel - 1];
                     double percent = ((double)temp1 / (double)best)*100.0;
-                    //System.out.println("Maximum score is " + best + ".\nWe scored " + temp1 + ".\nWe scored " + percent + "% of the maximum score!.\n");
-                    //System.out.println("Got " + temp1 + " score.");
+                    System.out.println("Maximum score is " + best + ".\nWe scored " + temp1 + ".\nWe scored " + percent + "% of the maximum score!.\n");
+                    System.out.println("Got " + temp1 + " score.");
                 }
             }
             //If the level is solved , go to the next level
             if ((state == GameState.WON) && (satisfactory == true)) {
                 firsttry = true;
-                //System.out.println("Loading next level now.\n");
+                System.out.println("Loading next level now.\n");
 
-                //System.out.println(" loading the level " + (currentLevel + 1) );
+                System.out.println(" loading the level " + (currentLevel + 1) );
                 checkMyScore();
                 currentLevel = (byte) getNextLevel();
                 ar.loadLevel(currentLevel);
@@ -194,22 +195,42 @@ public class ClientNaiveAgent implements Runnable {
                 // first shot on this level, try high shot first
                 firstShot = true;
 
-            } else
-                //If lost, then restart the level
-                if (state == GameState.LOST) {
+            }
+            //If lost, then restart the level
+            else if (state == GameState.LOST) {
+                    System.out.println("We lost because of GameState.LOST");
                     failedCounter++;
                     if (failedCounter > 2) {
+                        System.out.println("Too much failure, abandoning this level.");
                         failedCounter = 0;
                         currentLevel = (byte) getNextLevel();
                         ar.loadLevel(currentLevel);
 
                         //ar.loadLevel((byte)9);
                     } else {
+                        System.out.println("We can still try, restarting level.");
                         System.out.println("restart");
                         ar.restartLevel();
                     }
 
-                } else if (state == GameState.LEVEL_SELECTION) {
+                }
+                else if (state == GameState.WON && satisfactory == false) {
+                    System.out.println("We cleared the level but without a 3 star score, so trying again.");
+                    failedCounter++;
+                    if (failedCounter > 2) {
+                        System.out.println("Too much failure, abandoning this level.");
+                        failedCounter = 0;
+                        currentLevel = (byte) getNextLevel();
+                        ar.loadLevel(currentLevel);
+
+                        //ar.loadLevel((byte)9);
+                    } else {
+                        System.out.println("We can still try, restarting level.");
+                        System.out.println("restart");
+                        ar.restartLevel();
+                    }
+                }
+                else if (state == GameState.LEVEL_SELECTION) {
                     System.out.println("unexpected level selection page, go to the last current level : "
                             + currentLevel);
                     ar.loadLevel(currentLevel);
@@ -540,11 +561,11 @@ public class ClientNaiveAgent implements Runnable {
             }
             else if(y > (2*x)) {
                 //System.out.println("Block " + i + " is a tall rectangle.");
-                weight1.set(i, 3);
+                weight1.set(i, 5);
             }
             else {
                 //System.out.println("Block " + i + " is neither tall nor wide.");
-                weight1.set(i, 2);
+                weight1.set(i, 3);
             }
         }
     }
@@ -581,10 +602,18 @@ public class ClientNaiveAgent implements Runnable {
                     }
                     else {
                         //System.out.println("Block is above but not to left of previous target.\n");
+                        if(wi >= 2*wt) {
+                            id = i;
+                            wt = wi;
+                        }
                     }
                 }
                 else {
                     //System.out.println("Block is not above or left of previous target.\n");
+                    if(wi >= 2*wt) {
+                        id = i;
+                        wt = wi;
+                    }
                 }
             }
             else if(wi > avgwt && wi > wt) {
